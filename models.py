@@ -11,6 +11,9 @@ class Car(Base):
     price = Column(Float)
     horsepower = Column(Integer)
     description = Column(String, nullable=True)
+    likes = Column(Integer, default=0)
+
+
 
 
 

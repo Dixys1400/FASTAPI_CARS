@@ -10,6 +10,7 @@ class CarBase(BaseModel):
     price: float
     horsepower: int
     description: Optional[str] = None
+    likes: int
 
 
 

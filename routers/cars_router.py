@@ -24,14 +24,6 @@ def get_random_car(db: Session = Depends(get_db)):
 
 
 
-
-
-
-
-
-
-
-
 @router.get("/filter", response_model=List[CarOut])
 def filter_cars_by_price(
         max_price: Optional[float] = Query(None, description="Максимальная цена"),
@@ -51,15 +43,6 @@ def filter_cars_by_price(
     return results
 
 
-
-
-
-
-
-
-
-
-
 @router.get("/by_year", response_model=List[CarOut])
 async def get_cars_by_year(
     year: int = Query(..., description="Год выпуска"),
@@ -72,5 +55,15 @@ async def get_cars_by_year(
 
 
 
+@router.post("/cars{car_id}/like", response_model=List[CarOut])
+def like_car(car_id: int, db: Session = Depends(get_db)):
+    car = db.query(Car).filter(Car.id == car_id).first()
+    if not car:
+        raise HTTPException(status_code=404, detail="Машина не найдена")
 
+    car.likes += 1
+    db.commit()
+    db.refresh(car)
+
+    return {"message": "Вы лайкнули машину", "likes": car.likes}
 
